@@ -333,7 +333,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(1); //dsad
   }
   /* USER CODE END 5 */
 }
