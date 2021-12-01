@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -42,6 +43,44 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
 
+/* Definitions for defaultTask */
+osThreadId_t defaultTaskHandle;
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for RequestElevator */
+osThreadId_t RequestElevatorHandle;
+const osThreadAttr_t RequestElevator_attributes = {
+  .name = "RequestElevator",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for RequestFloor */
+osThreadId_t RequestFloorHandle;
+const osThreadAttr_t RequestFloor_attributes = {
+  .name = "RequestFloor",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for HandleRequests */
+osThreadId_t HandleRequestsHandle;
+const osThreadAttr_t HandleRequests_attributes = {
+  .name = "HandleRequests",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for requested_floors */
+osMessageQueueId_t requested_floorsHandle;
+const osMessageQueueAttr_t requested_floors_attributes = {
+  .name = "requested_floors"
+};
+/* Definitions for requested_elevator_from */
+osMessageQueueId_t requested_elevator_fromHandle;
+const osMessageQueueAttr_t requested_elevator_from_attributes = {
+  .name = "requested_elevator_from"
+};
 /* USER CODE BEGIN PV */
 /* USER CODE END PV */
 
@@ -49,6 +88,11 @@ UART_HandleTypeDef huart2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
+void StartDefaultTask(void *argument);
+void request_elevator(void *argument);
+void request_floor(void *argument);
+void handle_requests(void *argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -91,24 +135,66 @@ int main(void)
 	
   /* USER CODE END 2 */
 
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* creation of requested_floors */
+  requested_floorsHandle = osMessageQueueNew (3, sizeof(uint8_t), &requested_floors_attributes);
+
+  /* creation of requested_elevator_from */
+  requested_elevator_fromHandle = osMessageQueueNew (3, sizeof(uint8_t), &requested_elevator_from_attributes);
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of RequestElevator */
+  RequestElevatorHandle = osThreadNew(request_elevator, NULL, &RequestElevator_attributes);
+
+  /* creation of RequestFloor */
+  RequestFloorHandle = osThreadNew(request_floor, NULL, &RequestFloor_attributes);
+
+  /* creation of HandleRequests */
+  HandleRequestsHandle = osThreadNew(handle_requests, NULL, &HandleRequests_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	
-  while (1) // sssss
+  while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		if(HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_1))
-		{
-				// Set The LED ON!
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-		}
-		else
-		{
-				// Else .. Turn LED OFF!
-				HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-		}
+		
   }
   /* USER CODE END 3 */
 }
@@ -221,12 +307,6 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PB1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
   /*Configure GPIO pin : PB3 */
   GPIO_InitStruct.Pin = GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -239,6 +319,100 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void *argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_request_elevator */
+/**
+* @brief Function implementing the RequestElevator thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_request_elevator */
+void request_elevator(void *argument)
+{
+  /* USER CODE BEGIN request_elevator */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END request_elevator */
+}
+
+/* USER CODE BEGIN Header_request_floor */
+/**
+* @brief Function implementing the RequestFloor thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_request_floor */
+void request_floor(void *argument)
+{
+  /* USER CODE BEGIN request_floor */
+  /* Infinite loop */
+  for(;;)
+  {
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+    osDelay(1);
+  }
+  /* USER CODE END request_floor */
+}
+
+/* USER CODE BEGIN Header_handle_requests */
+/**
+* @brief Function implementing the HandleRequests thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_handle_requests */
+void handle_requests(void *argument)
+{
+  /* USER CODE BEGIN handle_requests */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END handle_requests */
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

@@ -1,0 +1,12 @@
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+contactlesselevator\port.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+contactlesselevator\port.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+contactlesselevator\port.o: ../Core/Inc/FreeRTOSConfig.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+contactlesselevator\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h

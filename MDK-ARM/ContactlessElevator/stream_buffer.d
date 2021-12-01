@@ -1,0 +1,14 @@
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
+contactlesselevator\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+contactlesselevator\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+contactlesselevator\stream_buffer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+contactlesselevator\stream_buffer.o: ../Core/Inc/FreeRTOSConfig.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+contactlesselevator\stream_buffer.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/stream_buffer.h
